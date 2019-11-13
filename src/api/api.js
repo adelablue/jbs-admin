@@ -16,8 +16,8 @@ export function getAllNotify(data) {
 /**
  * 查看详细的notify
  */
-export function checkAllNotify(data) {
-    return axios.get(`/notifications/` + data.serialNumber)
+export function checkAllNotify(data, body) {
+    return axios.put(`/notifications/` + data.serialNumber, body)
 }
 
 /** 

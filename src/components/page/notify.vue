@@ -87,10 +87,13 @@ export default {
       let data = {
         serialNumber: serialNumber
       };
+      let body = {
+        read: true
+      }
       let objectId = (item.objectId)
       this.$common.setSessionStorage('objectId', objectId)
       this.$router.push('details')
-      checkAllNotify(data).then(res => {
+      checkAllNotify(data, body).then(res => {
         if (res.status == 200) {
           this.$message({
             type: "success",
