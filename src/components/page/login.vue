@@ -5,20 +5,22 @@
     </ul>
     
     <div class="login">
-      <el-form :model="loginForm" :rules="rules" ref="loginForm">
-        <el-form-item>
-          <h2 class="title">不咕咕后台管理系统</h2>
-        </el-form-item>
-        <el-form-item prop="username">
-          <el-input v-model="loginForm.username" placeholder="请输入账号"></el-input>
-        </el-form-item>
-        <el-form-item prop="password">
-          <el-input type="password" v-model="loginForm.password" placeholder="请输入密码"></el-input>
-        </el-form-item>
-        <el-form-item >
-          <el-button type="primary" style="margin-top: 25px" @click="submitForm('loginForm')">登录</el-button>
-        </el-form-item>
-      </el-form>
+      <div class="login_wrap">
+        <el-form :model="loginForm" :rules="rules" ref="loginForm">
+          <el-form-item>
+            <h2 class="title">不咕咕后台管理系统</h2>
+          </el-form-item>
+          <el-form-item prop="username">
+            <el-input v-model="loginForm.username" placeholder="请输入账号"></el-input>
+          </el-form-item>
+          <el-form-item prop="password">
+            <el-input type="password" v-model="loginForm.password" placeholder="请输入密码"></el-input>
+          </el-form-item>
+          <el-form-item >
+            <el-button type="primary" style="margin-top: 25px" @click="submitForm('loginForm')">登录</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
     </div>
   </div>
 </template>
@@ -56,25 +58,28 @@ export default {
         if (valid) {
           let data = {
             username: this.loginForm.username,
-            password: (this.loginForm.password)
+            password: this.loginForm.password
           };
           login(data).then(res => {
-            if(res.status == 200) {
-                this.$message({
-                  type: "success",
-                  message: "账户登录成功!"
-                });
+            if (res.status == 200) {
+              this.$message({
+                type: "success",
+                message: "账户登录成功!"
+              });
               this.$router.push("/notifity");
-              var userToken = res.data.token
-              var userData = res.data.user
-              this.$common.setSessionStorage('token', JSON.stringify(userToken))
-              this.$common.setSessionStorage('user', JSON.stringify(userData))
-              this.$common.setSessionStorage('loginStatus', true)
+              var userToken = res.data.token;
+              var userData = res.data.user;
+              this.$common.setSessionStorage(
+                "token",
+                JSON.stringify(userToken)
+              );
+              this.$common.setSessionStorage("user", JSON.stringify(userData));
+              this.$common.setSessionStorage("loginStatus", true);
             } else {
               this.$message({
-                  type: "error",
-                  message: "账户登录失败!"
-                });
+                type: "error",
+                message: "账户登录失败!"
+              });
             }
           });
         }
@@ -88,35 +93,42 @@ export default {
 <style lang="scss" scoped>
 $input_width: 300px;
 .login_page {
-  background-color: #324057;
+  background-color: #409eff;
   width: 100%;
   height: 100%;
   .login {
-    width: 400px;
-    height: 300px;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    border-radius: 5px;
-    box-shadow: 0 0 25px #cac6c6;
-    background-color: #fff;
-    .title {
-      text-align: center;
-      color: #505458;
-    }
-    .el-form-item__content {
-      width: $input_width;
-    }
-    .el-button {
-      width: 240px;
-    }
-    .el-form {
-      margin: 30px 80px auto 80px;
-      .error {
-        display: block;
+
+    .login_wrap {
+      background-color: #fff;
+      width: 400px;
+      height: 300px;
+      border-radius: 5px;
+      box-shadow: 0 0 25px #cac6c6;
+      padding-top: 20px;
+      box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      -webkit-box-sizing: border-box;
+      .title {
         text-align: center;
-        color: red;
+        color: #505458;
+      }
+      .el-form-item__content {
+        width: $input_width;
+      }
+      .el-button {
+        width: 240px;
+      }
+      .el-form {
+        margin: 30px 80px auto 80px;
+        .error {
+          display: block;
+          text-align: center;
+          color: red;
+        }
       }
     }
   }
@@ -213,6 +225,37 @@ $input_width: 300px;
         height: 150px;
         animation-delay: 0s;
         animation-duration: 11s;
+      }
+    }
+  }
+}
+@media screen and (max-width: 480px) {
+  .login {
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    width: 100%;
+    .login_wrap {
+      width: 100% !important;
+      height: 60% !important;
+      padding-top: 0.1rem !important;
+      .title {
+        font-size: 0.35rem;
+      }
+
+      .el-form {
+        margin: 0.5rem 0.5rem 0.5rem 0.5rem !important;
+        padding-bottom: 0.5rem !important;
+        .error {
+          display: block;
+          text-align: center;
+          color: red;
+        }
+      }
+      .el-button {
+        width: 100% !important;
       }
     }
   }

@@ -1,63 +1,65 @@
 <template>
     <div class="container">
-        <div class="item">
+        <div>
+          <div class="item">
             <div class="script_name">剧本:   <span class="name_">{{scripts.name}}</span></div>
-        </div>
-        <div class="shop item">
-            <div class="shop_name">店名:   <span class="name_">{{shop.name}}</span></div>
-        </div>
-        <div class="startTime item">
-            <div class="start_time">时间:   <span class="time_">{{startTime_2}}</span></div>
-        </div>
-        <div class="price item">
-            <div class="script_price">价格:   <span class="price_">{{price}} 元/人</span></div>
-        </div>
-        <div class="process item">
-            <div class="script_process">进度:   <span class="process_"><i>{{now}}</i> == <i>{{wait}}</i> </span></div>
-        </div>
-        <div class="host item">
-            <div class="host_">发团人:   <span class="host_name">昵称: {{host_name}}</span> <span class="host_wechat">微信: <i class="i_host_wechat" v-clipboard:copy="host_wechat" v-clipboard:success="copyHost" v-clipboard:error="copyHostError">{{host_wechat}}</i></span></div>
-        </div>
-        <div class="host_mobile item">
-            <div class="host_m">发团人手机号:   <span class="mobile">{{host_mobile}}</span></div>
-        </div>
-        <div class="joiner item">
-            <div class="joiner_m">参团人:</div>
-            <div class="joiners">
-                <li v-for="item in joiners" :key="item.index">
-                    <span class="nickName">昵称: <i class="niname">{{item.user.nickName}}</i> <i class="weixin" v-clipboard:copy="item.user.wechatId" v-clipboard:success="copyJoiner" v-clipboard:error="copyJoinerError">{{item.user.wechatId}}</i></span>
-                </li>
+          </div>
+          <div class="shop item">
+              <div class="shop_name">店名:   <span class="name_">{{shop.name}}</span></div>
+          </div>
+          <div class="startTime item">
+              <div class="start_time">时间:   <span class="time_">{{startTime_2}}</span></div>
+          </div>
+          <div class="price item">
+              <div class="script_price">价格:   <span class="price_">{{price}} 元/人</span></div>
+          </div>
+          <div class="process item">
+              <div class="script_process">进度:   <span class="process_"><i>{{now}}</i> == <i>{{wait}}</i> </span></div>
+          </div>
+          <div class="host item">
+              <div class="host_">发团人:   <span class="host_name">昵称: {{host_name}}</span> <span class="host_wechat">微信: <i class="i_host_wechat" v-clipboard:copy="host_wechat" v-clipboard:success="copyHost" v-clipboard:error="copyHostError">{{host_wechat}}</i></span></div>
+          </div>
+          <div class="host_mobile item">
+              <div class="host_m">发团人手机号:   <span class="mobile">{{host_mobile}}</span></div>
+          </div>
+          <div class="joiner item">
+              <div class="joiner_m">参团人:</div>
+              <div class="joiners">
+                  <li v-for="item in joiners" :key="item.index">
+                      <span class="nickName">昵称: <i class="niname">{{item.user.nickName}}</i> <i class="weixin" v-clipboard:copy="item.user.wechatId" v-clipboard:success="copyJoiner" v-clipboard:error="copyJoinerError">{{item.user.wechatId}}</i></span>
+                  </li>
+              </div>
+              <div style="clear: both"></div>
+          </div>
+          <div class="btns">
+              <span class="nocallback" v-if="!status">返现</span>
+              <span class="callback" v-if="status" @click="showCallBack">返现</span>
+          </div>
+          <div class="dialog_wraps" v-if="dialogVisible">
+            <div class="dialog_contents">
+              <div class="dialogs-header">
+                <span class="title">返现详情</span>
+                <span class="el-icon-close close" @click="dialogVisible = false"></span>
+              </div>
+              <div class="contents">
+                  <li>总共返现: {{(total).toFixed(2)}}元</li>
+                  <li>发团人: {{host_name}} <i>{{(hostBack).toFixed(2)}}元</i></li>
+                  <li>
+                      <div class="joiner_m">参团人:</div>
+                      <div class="joiners">
+                          <li v-for="item in allBacks" :key="item.index">
+                              <span class="nickName">昵称: <i class="niname">{{item.nick}}</i> <i class="weixin">{{(item.money).toFixed(2)}}元</i></span>
+                          </li>
+                      </div>
+                      <div style="clear: both"></div>
+                  </li>
+              </div>
+              <div  class="dialogs-footer">
+                <el-button @click="dialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+              </div>
             </div>
-            <div style="clear: both"></div>
-        </div>
-        <div class="btns">
-            <span class="nocallback" v-if="!status">返现</span>
-            <span class="callback" v-if="status" @click="showCallBack">返现</span>
-        </div>
-        <div class="dialog_warp">
-            <el-dialog
-                title="返现详情"
-                :visible.sync="dialogVisible"
-                width="30%"
-                :before-close="handleClose">
-                <div class="content">
-                    <li>总共返现: {{total}}元</li>
-                    <li>发团人: {{host_name}} <i>{{hostBack}}元</i></li>
-                    <li>
-                        <div class="joiner_m">参团人:</div>
-                        <div class="joiners">
-                            <li v-for="item in allBacks" :key="item.index">
-                                <span class="nickName">昵称: <i class="niname">{{item.nick}}</i> <i class="weixin">{{item.money}}元</i></span>
-                            </li>
-                        </div>
-                        <div style="clear: both"></div>
-                    </li>
-                </div>
-                <span slot="footer" class="dialog-footer">
-                    <el-button @click="dialogVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
-                </span>
-                </el-dialog>
+          </div>
         </div>
     </div>
 </template>
@@ -100,11 +102,18 @@ export default {
   methods: {
     getInfo(data) {
       showDetails(data).then(res => {
+        if (res == undefined) {
+          this.$message({
+            type: "error",
+            message: "该活动不存在或已取消!"
+          });
+        }
         if (res.status == 200) {
           this.$message({
             type: "success",
             message: "获取数据成功!"
           });
+          this.hasData = true;
           this.infomations = res.data.data;
           this.shop = this.infomations.shop;
           this.scripts = this.infomations.script;
@@ -137,28 +146,37 @@ export default {
             this.hostBack = hostBack.amount;
             this.joinerBacks = joinerBack.length * joinerBack[0].amount;
             this.joinerBack = joinerBack[0].amount;
+
             this.total = this.hostBack + this.joinerBacks;
             for (let i = 0; i < joinerBack.length; i++) {
-                for (let j = 0; j < this.joiners.length; j++) {
-                    if (this.joiners[j].user.id == joinerBack[i].user) {
-                        var data = {
-                            nick: this.joiners[j].user.nickName,
-                            money: joinerBack[0].amount
-                        }
-                        this.allBacks.push(data)
-                    }
+              for (let j = 0; j < this.joiners.length; j++) {
+                if (this.joiners[j].user.id == joinerBack[i].user) {
+                  var data = {
+                    nick: this.joiners[j].user.nickName,
+                    money: joinerBack[0].amount
+                  };
+                  this.allBacks.push(data);
+                  console.log(this.allBacks);
                 }
+              }
             }
+          } else {
+            this.$message({
+              type: "success",
+              message: "暂未获取到返现详情!"
+            });
+            this.hasData = false;
           }
           if (this.infomations.status == "completed") {
             this.status = true;
           } else {
             this.status = false;
           }
-        } else {
+        } else if (res.status == 404) {
+          this.hasData = true;
           this.$message({
             type: "success",
-            message: "系统错误!"
+            message: "该活动不存在或已取消!"
           });
         }
       });
@@ -236,9 +254,14 @@ export default {
         margin-bottom: 10px;
         display: inline-block;
         i {
-          color: red;
           font-style: normal;
           margin-right: 10px;
+        }
+        i.niname {
+          color: #000;
+        }
+        i.weixin {
+          color: red;
         }
       }
     }
@@ -262,31 +285,165 @@ export default {
       border-radius: 5px;
     }
   }
-  .dialog_warp{
-      .content{
-          li{
-                font-style: normal;
-                list-style: none;
-                margin-bottom: 10px;
-              i{
-                  color: red;
-                  font-style: normal;
-              }
-              .joiner_m{
-                  float: left;
-              }
-              .joiners{
-                  float: left;
-                  margin-left: 10px;
-                  li{
-                      font-style: normal;
-                      .weixin{
-                          margin-left: 10px;
-                      }
-                  }
-              }
-          }
+  .dialog_wraps {
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgba($color: #000000, $alpha: 0.5);
+    .dialogs-header {
+      border-bottom: 1px solid #ccc;
+      height: 30px;
+      line-height: 30px;
+      margin-bottom: 15px;
+      font-size: 20px;
+      .close {
+        float: right;
+        cursor: pointer;
+        margin-top: 5px;
       }
+    }
+    .dialog_contents {
+      width: 500px;
+      height: 400px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #fff;
+      border-radius: 5px;
+      padding: 20px;
+      .contents {
+        li {
+          font-style: normal;
+          list-style: none;
+          margin-bottom: 10px;
+          i {
+            font-style: normal;
+            margin-right: 10px;
+          }
+          i.niname {
+            color: #000;
+          }
+          i.weixin {
+            color: red;
+          }
+          .joiner_m {
+            float: left;
+          }
+          .joiners {
+            float: left;
+            margin-left: 10px;
+            li {
+              font-style: normal;
+              .weixin {
+                margin-left: 10px;
+              }
+            }
+          }
+        }
+      }
+      .dialogs-footer {
+        position: absolute;
+        bottom: 10px;
+        right: 20px;
+      }
+    }
+  }
+  .noData_container {
+    min-height: 300px;
+    position: relative;
+    .noData {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 30px;
+      color: #999;
+    }
+  }
+}
+@media screen and (max-width: 480px) {
+  .container {
+    padding: 0.2rem;
+    padding-top: 0.6rem;
+    .item {
+      font-size: 0.14rem;
+    }
+    .btns {
+      top: 0.2rem;
+      right: 0.2rem;
+      .callback,
+      .nocallback {
+        padding: 0.1rem 0.2rem !important;
+        font-size: 0.14rem;
+      }
+    }
+    .dialog_wraps {
+      width: 100%;
+      height: 100%;
+      z-index: 9999;
+      position: fixed;
+      top: 0;
+      left: 0;
+      background: rgba($color: #000000, $alpha: 0.5);
+      .dialogs-header {
+        border-bottom: 1px solid #ccc;
+        height: 0.5rem;
+        line-height: 0.5rem;
+        margin-bottom: 0.2rem;
+        font-size: 0.3rem;
+        .close {
+          float: right;
+          cursor: pointer;
+          margin-top: 0.05rem;
+        }
+      }
+      .dialog_contents {
+        width: 85%;
+        height: 50%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #fff;
+        border-radius: 5px;
+        padding: 0.5rem !important;
+        font-size: 0.15rem;
+        .contents {
+          li {
+            font-style: normal;
+            list-style: none;
+            margin-bottom: 0.15rem;
+            i {
+              color: red;
+              font-style: normal;
+            }
+            .joiner_m {
+              float: left;
+              margin-top: 0.073rem;
+            }
+            .joiners {
+              float: left;
+              margin-left: 0.5rem;
+              li {
+                font-style: normal;
+                .weixin {
+                  margin-left: 0.5rem;
+                }
+              }
+            }
+          }
+        }
+        .dialogs-footer {
+          position: absolute;
+          bottom: 0.5rem;
+          right: 0.5rem;
+        }
+      }
+    }
   }
 }
 </style>

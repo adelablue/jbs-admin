@@ -24,6 +24,21 @@ export default new Router({
                     path: '/details',
                     component: resolve => require(['../components/page/details.vue'], resolve),
                     meta: { title: '消息详情', requireAuth: true }
+                },
+                {
+                    path: '/orders',
+                    component: resolve => require(['../components/page/orders.vue'], resolve),
+                    meta: { title: '订单列表', requireAuth: true }
+                },
+                {
+                    path: '/events',
+                    component: resolve => require(['../components/page/events.vue'], resolve),
+                    meta: { title: '活动列表', requireAuth: true }
+                },
+                {
+                    path: '/events_refund',
+                    component: resolve => require(['../components/page/ordersfund.vue'], resolve),
+                    meta: { title: '活动订单', requireAuth: true }
                 }
             ]
         },

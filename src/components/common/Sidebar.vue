@@ -35,12 +35,23 @@
                 items: [
                     {
                         icon: 'el-icon-s-grid',
-                        index: '1',
+                        index: '0',
                         title: '通知管理',
                         subs: [
                             {
                                 index: 'notifity',
                                 title: '通知列表',
+                            }
+                        ]
+                    },
+                    {
+                        icon: 'el-icon-tickets',
+                        index: '1',
+                        title: '活动管理',
+                        subs: [
+                            {
+                                index: 'events',
+                                title: '活动列表',
                             }
                         ]
                     }

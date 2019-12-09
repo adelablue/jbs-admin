@@ -5,27 +5,85 @@ import moment from 'moment'
  * @param 登录接口
  */
 export function login(data) {
-    return axios.post('/auth/login', data)
+    return axios.post('/api/auth/login', data)
 }
 /**
  * 获取所有的notify
  */
 export function getAllNotify(data) {
-    return axios.get(`/notifications?offset=${data.offset}&limit=${data.limit}&audience=${data.audience}`)
+    let query = `&audience=${data.audience}`
+    if (data.eventType) {
+        query += `&eventType=${data.eventType}`        
+    }
+    if (data.message) {
+        query += `&message=${data.message}`                
+    }
+    return axios.get(`/api/notifications?offset=${data.offset}&limit=${data.limit}` + query)
+}
+/** 
+ * 通过查询获取notify
+ */
+export function getNotifyBySearch(data) {
+    return axios.get(`/api/notifications?offset=${data.offset}&limit=${data.limit}&event_type=${data.event_type}&wechat=${data.wechat}`)
 }
 /**
  * 查看详细的notify
  */
 export function checkAllNotify(data, body) {
-    return axios.put(`/notifications/` + data.serialNumber, body)
+    return axios.put(`/api/notifications/` + data.serialNumber, body)
 }
 
 /** 
  * 查看消息详情
  */
 export function showDetails(data) {
-    return axios.get(`/events/${data}/simplified`)
+    return axios.get(`/api/events/${data}/simplified`)
 }
+
+/** 
+ * 获取所有的订单
+ */
+export function getOrders(data) {
+    let query = ``
+    if (data.tradeNo) {
+        query += `&tradeNo=${data.tradeNo}`        
+    }
+    return axios.get(`/api/orders?offset=${data.offset}&limit=${data.limit}` + query)
+}
+
+/** 
+ * 更新订单状态
+ */
+export function updateOrder(data, body) {
+    return axios.put(`/api/orders/${data.orderId}/refund/${data.refundId}`, body)
+}
+
+/** 
+ * 退款
+ */
+export function refundOrder(data) {
+    return axios.post(`/api/orders/refund`)
+}
+
+/** 
+ * 获取所有的活动列表
+ */
+export function allEvents(data) {
+    let query = `&filter=${data.status}`
+    if (data.keyword) {
+        query += `&keyword=${data.keyword}`
+    }
+    return axios.get(`/api/events?offset=${data.offset}&limit=${data.limit}` + query)
+}
+/** 
+ * 查看该活动的订单
+ */
+export function eventOrder(eventIds) {
+    return axios.get(`/api/events/${eventIds}/orders`)
+}
+
+
+
 
 /**
  * 通用方法

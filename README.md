@@ -16,6 +16,40 @@ npm run build
 
 # build for production and view the bundle analyzer report
 npm run build --report
+
+```
+# note
+```
+开发环境 去掉index.js proxyTable中的api 和api.js中的api
+- eg:
+index.js
+proxyTable: {
+    '/': {
+    target: 'https://api.boogoogoo.com',
+    // target: 'http://localhost:3000',
+    changeOrigin: true,
+    }
+},
+api.js
+export function login(data) {
+    return axios.post('/auth/login', data)
+}
+
+
+正是环境 加上index.js proxyTable中的api 和api.js中的api
+- eg:
+index.js
+proxyTable: {
+    '/api': {
+    target: 'https://api.boogoogoo.com',
+    // target: 'http://localhost:3000',
+    changeOrigin: true,
+    }
+},
+api.js
+export function login(data) {
+    return axios.post('/api/auth/login', data)
+}
 ```
 
 For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
