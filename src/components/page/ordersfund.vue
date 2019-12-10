@@ -28,7 +28,8 @@
                 <el-table-column
                     label="操作">
                     <template slot-scope="scope">
-                        <el-button type="primary"  @click="updateOrder(scope.row)">退款</el-button>
+                        <el-button type="primary"  v-if="scope.row.orderStatus2 != '已退款'" @click="updateOrder(scope.row)">返现</el-button>
+                        <el-button type="primary"  v-if="scope.row.orderStatus2 == '已退款'"  @click="updateOrder2(scope.row.orderStatus2)">返现</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -68,63 +69,66 @@ export default {
         }
         this.pageShow = true;
         let refundsList = res.data.data;
-        console.log(refundsList)
-        for(let i = 0; i < refundsList.length; i++) {
-          if (refundsList[i].orderStatus == 'paid' || refundsList[i].orderStatus == 'refund') {
-            refundsList[i].amont2 = (
-              refundsList[i].amount / 100
-            ).toFixed(2);
-            refundsList[i].create_time = formatDate(
-              new Date(refundsList[i].createdAt)
-            );
-             if (
-            refundsList[i].orderStatus == "paid" &&
-            refundsList[i].refunds.length == 0
-          ) {
-            refundsList[i].orderStatus2 = "已支付";
-          } else if (
-            refundsList[i].refunds.length > 0 &&
-            refundsList[i].refunds[0].resultCode == "SUCCESS"
-          ) {
-            refundsList[i].orderStatus2 = "已退款";
-          } else if (
-            refundsList[i].orderStatus == "refund" &&
-            refundsList[i].refunds[0].type == "refund" &&
-            refundsList[i].refunds.length > 0
-          ) {
-            refundsList[i].orderStatus2 = "申请退款";
-          } else if (
-            refundsList[i].orderStatus == "paid" &&
-            refundsList[i].refunds[0].status == "approved" &&
-            refundsList[i].refunds.length > 0
-          ) {
-            refundsList[i].orderStatus2 = "退款中";
-          } else if (
-            refundsList[i].orderStatus == "refund" &&
-            refundsList[i].refunds[0].status == "approved" &&
-            refundsList[i].refunds.length > 0
-          )  {
-            refundsList[i].orderStatus2 = "退款中";
-          }  else if (
-            refundsList[i].orderStatus == "refund" &&
-            refundsList[i].refunds[0].resultCode == "SUCCESS" &&
-            refundsList[i].refunds.length > 0
-          ) {
-            refundsList[i].orderStatus2 = "申请退款";
-          } else if (
-            refundsList[i].orderStatus == "paid" &&
-            refundsList[i].refunds[0].type == "commission" &&
-            refundsList[i].refunds.length > 0
-          ) {
-            refundsList[i].orderStatus2 = "待返现";
-          }
-            this.refundsList.push(refundsList[i])
+        for (let i = 0; i < refundsList.length; i++) {
+          console.log(refundsList[i])
+          for (let j = 0; j < refundsList[i].refunds.length; j++) {
+            if (
+              refundsList[i].orderStatus == "paid" ||
+              refundsList[i].orderStatus == "refund"
+            ) {
+              refundsList[i].amont2 = (refundsList[i].amount / 100).toFixed(2);
+              refundsList[i].create_time = formatDate(
+                new Date(refundsList[i].createdAt)
+              );
+              if (
+                refundsList[i].orderStatus == "paid" &&
+                refundsList[i].refunds.length == 0
+              ) {
+                refundsList[i].orderStatus2 = "已支付";
+              } else if (
+                refundsList[i].refunds.length > 0 &&
+                refundsList[i].refunds[j].resultCode == "SUCCESS"
+              ) {
+                refundsList[i].orderStatus2 = "已退款";
+              } else if (
+                refundsList[i].orderStatus == "refund" &&
+                refundsList[i].refunds[j].type == "refund" &&
+                refundsList[i].refunds.length > 0
+              ) {
+                refundsList[i].orderStatus2 = "申请退款";
+              } else if (
+                refundsList[i].orderStatus == "paid" &&
+                refundsList[i].refunds[j].status == "approved" &&
+                refundsList[i].refunds.length > 0
+              ) {
+                refundsList[i].orderStatus2 = "退款中";
+              } else if (
+                refundsList[i].orderStatus == "refund" &&
+                refundsList[i].refunds[j].status == "approved" &&
+                refundsList[i].refunds.length > 0
+              ) {
+                refundsList[i].orderStatus2 = "退款中";
+              } else if (
+                refundsList[i].orderStatus == "refund" &&
+                refundsList[i].refunds[j].resultCode == "SUCCESS" &&
+                refundsList[i].refunds.length > 0
+              ) {
+                refundsList[i].orderStatus2 = "申请退款";
+              } else if (
+                refundsList[i].orderStatus == "paid" &&
+                refundsList[i].refunds[j].type == "commission" &&
+                refundsList[i].refunds.length > 0
+              ) {
+                refundsList[i].orderStatus2 = "待返现";
+              }
+              this.refundsList.push(refundsList[i]);
+            }
           }
         }
       });
     },
     updateOrder(item) {
-      if (item.refunds[0].refundStatus == "SUCCESS") {
+      if (item.refundStatus2 == "已退款") {
         this.$message({
           type: "error",
           message: "~@o@~ 已退款的订单不能退款哦! ~@o@~ "
@@ -145,7 +149,6 @@ export default {
       let body = {
         status: "approved"
       };
-      console.log(item)
       updateOrder(data, body).then(res => {
         if (res.status == 200) {
           this.$message({
@@ -159,6 +162,22 @@ export default {
           });
         }
       });
+    },
+    updateOrder2(item) {
+      if (item == "已退款") {
+        this.$message({
+          type: "error",
+          message: "~@o@~ 已退款的订单不能退款哦! ~@o@~ "
+        });
+        return false;
+      }
+      if (item.orderStatus == "paid" && item.refunds.length == 0) {
+        this.$message({
+          type: "error",
+          message: "~@o@~ 未申请退款的订单不能退款哦! ~@o@~ "
+        });
+        return false;
+      }
     }
   }
 };

@@ -36,7 +36,7 @@ export function login(data) {
 }
 
 
-正是环境 加上index.js proxyTable中的api 和api.js中的api
+生产环境 加上index.js proxyTable中的api 和api.js中的api
 - eg:
 index.js
 proxyTable: {
