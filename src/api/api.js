@@ -69,7 +69,7 @@ export function refundOrder(data) {
  * 获取所有的活动列表
  */
 export function allEvents(data) {
-    let query = `&filter=${data.status}`
+    let query = `&sort=%7B%22createdAt%22%3A+-1%7D&filter=${data.status}`
     if (data.keyword) {
         query += `&keyword=${data.keyword}`
     }
