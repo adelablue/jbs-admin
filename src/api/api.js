@@ -18,7 +18,7 @@ export function getAllNotify(data) {
     if (data.message) {
         query += `&message=${data.message}`                
     }
-    return axios.get(`/notifications?offset=${data.offset}&limit=${data.limit}` + query)
+    return axios.get(`/api/notifications?offset=${data.offset}&limit=${data.limit}` + query)
 }
 /** 
  * 通过查询获取notify
