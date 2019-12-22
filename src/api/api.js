@@ -18,7 +18,7 @@ export function getAllNotify(data) {
     if (data.message) {
         query += `&message=${data.message}`                
     }
-    return axios.get(`/api/notifications?offset=${data.offset}&limit=${data.limit}` + query)
+    return axios.get(`/notifications?offset=${data.offset}&limit=${data.limit}` + query)
 }
 /** 
  * 通过查询获取notify
@@ -82,8 +82,12 @@ export function eventOrder(eventIds) {
     return axios.get(`/api/events/${eventIds}/orders`)
 }
 
-
-
+/** 
+ * 获取所有的业务报表
+ */
+export function allReports(data) {
+    return axios.get(`/api/reports/events?offset=${data.offset}&limit=${data.limit}&shopName=${data.shopName}&fromDate=${data.fromDate}&toDate=${data.toDate}`)
+}
 
 /**
  * 通用方法

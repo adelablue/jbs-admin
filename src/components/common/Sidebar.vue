@@ -54,6 +54,17 @@
                                 title: '活动列表',
                             }
                         ]
+                    },
+                    {
+                        icon: 'el-icon-date',
+                        index: '2',
+                        title: '业务报表',
+                        subs: [
+                            {
+                                index: 'buss_report',
+                                title: '订单报表',
+                            }
+                        ]
                     }
                 ]
             }

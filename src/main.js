@@ -12,6 +12,8 @@ import {getPath} from './api/common'
 import util from  './api/util'
 import Cookies from 'js-cookie'
 import VueClipboard from 'vue-clipboard2'
+import Blob from './vendor/Blob.js'
+import Export2Excel from './vendor/Export2Excel.js'
 
 Vue.use(VueClipboard)
 Vue.use(ElementUI, { size: 'small' });

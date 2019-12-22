@@ -29,6 +29,11 @@ export default new Router({
                     path: '/events',
                     component: resolve => require(['../components/page/events.vue'], resolve),
                     meta: { title: '活动列表', requireAuth: true }
+                },
+                {
+                    path: '/buss_report',
+                    component: resolve => require(['../components/page/buss_report.vue'], resolve),
+                    meta: { title: '业务报表', requireAuth: true }
                 }
             ]
         },
