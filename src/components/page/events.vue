@@ -44,16 +44,16 @@
                 label="活动状态">
             </el-table-column>
             <el-table-column
-                prop="create_time"
-                label="创建时间">
-            </el-table-column>
-            <el-table-column
                 prop="start_time"
                 label="开始时间">
             </el-table-column>
             <el-table-column
                 prop="end_time"
                 label="结束时间">
+            </el-table-column>
+            <el-table-column
+                prop="create_time"
+                label="创建时间">
             </el-table-column>
             <el-table-column
                 prop="price"
@@ -80,6 +80,10 @@
                       <span>{{scope.row.outTradeNo}}</span>
                     </template>
                   </el-table-column>
+                  <el-table-column
+                      prop="nickName"
+                      label="参(发)团人">
+                    </el-table-column>
                     <el-table-column
                       prop="refundDesc"
                       label="返现描述">
@@ -302,6 +306,7 @@ export default {
                     list[i].refunds[j].orderStatus2 = "返现失败";
                   }
                   list[i].refunds[j].order_id = list[i].id;
+                  list[i].refunds[j].nickName = list[i].refunds[j].user.nickName
                   that.refundsList.push(list[i].refunds[j]);
                 }
               }
@@ -314,6 +319,7 @@ export default {
       }
     },
     getRefunds(item) {
+      console.log(item);
       if (item.refundStatus2 == "已退款") {
         this.$message({
           type: "error",

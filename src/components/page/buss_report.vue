@@ -82,12 +82,12 @@
             </el-table-column>
           </el-table>
         </div>
-        <div class="Pagination" >
+        <div class="Pagination" v-if="pageShow">
           <el-pagination
               background
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
-              :current-page="currentPage"
+              :current-page.sync="currentPage"
               :pager-count="5"
               :page-sizes="[10, 20, 25, 50, 100]"
               :page-size="10"
@@ -106,7 +106,7 @@ export default {
       postData: {
         limit: 10,
         offset: 0,
-        shopName: "x",
+        shopName: "梧桐树",
         fromDate: "2019-12-09",
         toDate: "2019-12-31"
       },
@@ -128,7 +128,10 @@ export default {
   mounted() {
     let data = {
       limit: 10,
-      offset: 0
+      offset: 0,
+      shopName: "梧桐树",
+      fromDate: "2019-12-01",
+      toDate: "2019-12-31"
     };
     if (this.$common.getSessionStorage("currentPage_report")) {
       data.offset =
@@ -141,16 +144,25 @@ export default {
     if (this.$common.getSessionStorage("shopName")) {
       data.shopName = this.$common.getSessionStorage("shopName");
       this.shopName = this.$common.getSessionStorage("shopName");
+    } else {
+      this.shopName = data.shopName
     }
     if (this.$common.getSessionStorage("fromDate")) {
       data.fromDate = this.$common.getSessionStorage("fromDate");
       this.fromDate = this.$common.getSessionStorage("fromDate");
       this.beginTime = this.fromDate;
+    } else {
+      this.beginTime = data.fromDate
+      this.fromDate = data.fromDate
+      
     }
     if (this.$common.getSessionStorage("toDate")) {
       data.toDate = this.$common.getSessionStorage("toDate");
       this.toDate = this.$common.getSessionStorage("toDate");
       this.endTime = this.toDate;
+    } else {
+      this.endTime = data.toDate
+      this.toDate = data.toDate
     }
     this.getAllReports(data);
   },
@@ -160,7 +172,7 @@ export default {
         if (res.status == 200) {
           let reportList = res.data.data;
           let alllback = 0;
-
+          this.pageShow = true
           this.reportList = [];
           this.total = res.data.pagination.total.total;
           for (let i = 0; i < reportList.length; i++) {
@@ -249,7 +261,10 @@ export default {
       this.postData.limit = val;
       let data = {
         limit: val,
-        offset: 0
+        offset: 0,
+        shopName: "梧桐树",
+        fromDate: "2019-12-01",
+        toDate: "2019-12-31"
       };
       if (this.shopName) {
         data.shopName = this.shopName;
@@ -272,7 +287,9 @@ export default {
       let data = {
         limit: 10,
         offset: (val - 1) * 10,
-        status: status
+        shopName: "梧桐树",
+        fromDate: "2019-12-01",
+        toDate: "2019-12-31"
       };
       if (this.shopName) {
         data.shopName = this.shopName;
@@ -303,14 +320,32 @@ export default {
     async export2Excel() {
       this.allList = [];
       let count = this.total;
-      let page_size = Math.ceil(count / 100);
-      for (let i = 1; i < page_size + 1; i++) {
+      let page_size = Math.ceil(count / 10);
+      let shopName = ''
+      let fromDate = ''
+      let toDate   = ''
+      if(this.shopName) {
+        shopName = this.shopName
+      } else {
+        shopName = this.postData.shopName
+      }
+      if(this.fromDate) {
+        fromDate = this.fromDate
+      } else {
+        fromDate = this.postData.fromDate
+      }
+      if(this.toDate) {
+        toDate = this.toDate
+      } else {
+        toDate = this.postData.toDate
+      }
+      for (let i = 0; i <= page_size; i++) {
         var data = {
-          limit: count,
-          offset: this.postData.offset,
-          shopName: this.shopName,
-          fromDate: this.fromDate,
-          toDate: this.toDate
+          limit: 10,
+          offset: i * 10 ,
+          shopName: shopName,
+          fromDate: fromDate,
+          toDate: toDate
         };
         var res = await allReports(data).then(res => {
           if (res.status == 200) {
