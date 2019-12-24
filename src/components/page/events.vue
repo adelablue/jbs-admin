@@ -94,6 +94,7 @@
                     </el-table-column>
                     <el-table-column
                       prop="amont2"
+                      width="80"
                       label="价格(元)">
                     </el-table-column>
                     <el-table-column
@@ -273,13 +274,16 @@ export default {
         if (row) {
           that.expands.push(row.id);
           that.refundsList = [];
+          let refundsList = [];
+          let newRefundsList = [];
           eventOrder(row.id).then(res => {
             if (res.status == 200) {
               let refundsList = [];
               let list = res.data.data;
               that.haveRefund = true;
               let pay_data = {};
-              for (let i = 0; i < list.length; i++) {
+              let refunds0_len = 0
+              for (let i = 1; i < list.length; i++) {
                 for (let j = 0; j < list[i].refunds.length; j++) {
                   list[i].refunds[j].amont2 = (
                     list[i].refunds[j].refundAmount / 100
@@ -306,10 +310,47 @@ export default {
                     list[i].refunds[j].orderStatus2 = "返现失败";
                   }
                   list[i].refunds[j].order_id = list[i].id;
-                  list[i].refunds[j].nickName = list[i].refunds[j].user.nickName
-                  that.refundsList.push(list[i].refunds[j]);
+                  list[i].refunds[j].nickName =
+                    list[i].refunds[j].user.nickName;
+                  refundsList.push(list[i].refunds[j]);
+                  newRefundsList = this.getArrSingle(refundsList);
                 }
               }
+              if (list[0].refunds.length > 2) {
+                refunds0_len = 2
+              }
+              for (let j = 0; j < refunds0_len; j++) {
+                list[0].refunds[j].amont2 = (
+                  list[0].refunds[j].refundAmount / 100
+                ).toFixed(2);
+                list[0].refunds[j].create_time = formatDate(
+                  new Date(list[0].refunds[j].createdAt)
+                );
+                if (list[0].refunds[j].status == "created") {
+                  list[0].refunds[j].orderStatus2 = "创建返现";
+                }
+                if (list[0].refunds[j].status == "refund") {
+                  list[0].refunds[j].orderStatus2 = "可返现";
+                }
+                if (
+                  list[0].refunds[j].status == "refund" &&
+                  list[0].refunds[j].resultCode == "SUCCESS"
+                ) {
+                  list[0].refunds[j].orderStatus2 = "已返现";
+                }
+                if (list[0].refunds[j].status == "approved") {
+                  list[0].refunds[j].orderStatus2 = "返现中";
+                }
+                if (list[0].refunds[j].status == "failed") {
+                  list[0].refunds[j].orderStatus2 = "返现失败";
+                }
+                list[0].refunds[j].order_id = list[0].id;
+                list[0].refunds[j].nickName = list[0].refunds[j].user.nickName;
+                newRefundsList.push(list[0].refunds[j]);
+              }
+            }
+            for(let i = 0 ; i < newRefundsList.length; i++) {
+              this.refundsList.push(newRefundsList[i])
             }
           });
         }
@@ -317,6 +358,17 @@ export default {
         // 说明收起了
         that.expands = [];
       }
+    },
+    getArrSingle(arr) {
+      let newArr = [];
+      let obj = {};
+      for (var i = 0; i < arr.length; i++) {
+        if (!obj[arr[i].order]) {
+          newArr.push(arr[i]);
+          obj[arr[i].order] = true;
+        }
+      }
+      return newArr;
     },
     getRefunds(item) {
       console.log(item);
