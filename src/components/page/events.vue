@@ -119,6 +119,10 @@
                 </el-table>
               </template>
             </el-table-column>
+            <el-table-column
+                prop="supportPaymentDisplay"
+                label="支持支付?">
+            </el-table-column>
           </el-table>
         </div>
 
@@ -215,6 +219,7 @@ export default {
             } else if (eventList[i].status == "completed") {
               eventList[i].status2 = "已完成";
             }
+            eventList[i].supportPaymentDisplay = eventList[i].supportPayment ? '是' : '否'
           }
           this.eventList = eventList;
           this.total = res.data.pagination.total;

@@ -5,12 +5,14 @@ import moment from 'moment'
  * @param 登录接口
  */
 export function login(data) {
-    return axios.post('/api/auth/login', data)
+    const API_PREFIX = process.env.NODE_ENV === 'development' ? '' : '/api';
+    return axios.post(`${API_PREFIX}/auth/login`, data)
 }
 /**
  * 获取所有的notify
  */
 export function getAllNotify(data) {
+    const API_PREFIX = process.env.NODE_ENV === 'development' ? '' : '/api';
     let query = `&audience=${data.audience}`
     if (data.eventType) {
         query += `&eventType=${data.eventType}`        
@@ -18,75 +20,84 @@ export function getAllNotify(data) {
     if (data.message) {
         query += `&message=${data.message}`                
     }
-    return axios.get(`/api/notifications?offset=${data.offset}&limit=${data.limit}` + query)
+    return axios.get(`${API_PREFIX}/notifications?offset=${data.offset}&limit=${data.limit}` + query)
 }
 /** 
  * 通过查询获取notify
  */
 export function getNotifyBySearch(data) {
-    return axios.get(`/api/notifications?offset=${data.offset}&limit=${data.limit}&event_type=${data.event_type}&wechat=${data.wechat}`)
+    const API_PREFIX = process.env.NODE_ENV === 'development' ? '' : '/api';
+    return axios.get(`${API_PREFIX}/notifications?offset=${data.offset}&limit=${data.limit}&event_type=${data.event_type}&wechat=${data.wechat}`)
 }
 /**
  * 查看详细的notify
  */
 export function checkAllNotify(data, body) {
-    return axios.put(`/api/notifications/` + data.serialNumber, body)
+    const API_PREFIX = process.env.NODE_ENV === 'development' ? '' : '/api';
+    return axios.put(`${API_PREFIX}/notifications/` + data.serialNumber, body)
 }
 
 /** 
  * 查看消息详情
  */
 export function showDetails(data) {
-    return axios.get(`/api/events/${data}/simplified`)
+    const API_PREFIX = process.env.NODE_ENV === 'development' ? '' : '/api';
+    return axios.get(`${API_PREFIX}/events/${data}/simplified`)
 }
 
 /** 
  * 获取所有的订单
  */
 export function getOrders(data) {
+    const API_PREFIX = process.env.NODE_ENV === 'development' ? '' : '/api';
     let query = ``
     if (data.tradeNo) {
         query += `&tradeNo=${data.tradeNo}`        
     }
-    return axios.get(`/api/orders?offset=${data.offset}&limit=${data.limit}` + query)
+    return axios.get(`${API_PREFIX}/orders?offset=${data.offset}&limit=${data.limit}` + query)
 }
 
 /** 
  * 更新订单状态
  */
 export function updateOrder(data, body) {
-    return axios.put(`/api/orders/${data.orderId}/refund/${data.refundId}`, body)
+    const API_PREFIX = process.env.NODE_ENV === 'development' ? '' : '/api';
+    return axios.put(`${API_PREFIX}/orders/${data.orderId}/refund/${data.refundId}`, body)
 }
 
 /** 
  * 退款
  */
 export function refundOrder(data) {
-    return axios.post(`/api/orders/refund`)
+    const API_PREFIX = process.env.NODE_ENV === 'development' ? '' : '/api';
+    return axios.post(`${API_PREFIX}/orders/refund`)
 }
 
 /** 
  * 获取所有的活动列表
  */
 export function allEvents(data) {
+    const API_PREFIX = process.env.NODE_ENV === 'development' ? '' : '/api';
     let query = `&sort=%7B%22createdAt%22%3A+-1%7D&filter=${data.status}`
     if (data.keyword) {
         query += `&keyword=${data.keyword}`
     }
-    return axios.get(`/api/events?offset=${data.offset}&limit=${data.limit}` + query)
+    return axios.get(`${API_PREFIX}/events?offset=${data.offset}&limit=${data.limit}` + query)
 }
 /** 
  * 查看该活动的订单
  */
 export function eventOrder(eventIds) {
-    return axios.get(`/api/events/${eventIds}/orders`)
+    const API_PREFIX = process.env.NODE_ENV === 'development' ? '' : '/api';
+    return axios.get(`${API_PREFIX}/events/${eventIds}/orders`)
 }
 
 /** 
  * 获取所有的业务报表
  */
 export function allReports(data) {
-    return axios.get(`/api/reports/events?offset=${data.offset}&limit=${data.limit}&shopName=${data.shopName}&fromDate=${data.fromDate}&toDate=${data.toDate}`)
+    const API_PREFIX = process.env.NODE_ENV === 'development' ? '' : '/api';
+    return axios.get(`${API_PREFIX}/reports/events?offset=${data.offset}&limit=${data.limit}&shopName=${data.shopName}&fromDate=${data.fromDate}&toDate=${data.toDate}`)
 }
 
 /**

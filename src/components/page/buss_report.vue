@@ -80,6 +80,10 @@
                 prop="back"
                 label="总返现">
             </el-table-column>
+            <el-table-column
+                prop="supportPayment"
+                label="支持支付?">
+            </el-table-column>
           </el-table>
         </div>
         <div class="Pagination" v-if="pageShow">
@@ -216,7 +220,8 @@ export default {
                 Number(reportList[i].price) *
                   Number(reportList[i].members.length) -
                   alllback
-              ).toFixed(2)
+              ).toFixed(2),
+              supportPayment: reportList[i].supportPayment ? '是' : '否'
             };
             this.reportList.push(res);
           }
@@ -383,7 +388,8 @@ export default {
           "活动人数",
           "总金额",
           "总返现",
-          "结算金额"
+          "结算金额",
+          "支持支付"
         ];
         const filterVal = [
           "script",
@@ -397,7 +403,8 @@ export default {
           "person",
           "amount",
           "back",
-          "complete"
+          "complete",
+          "supportPayment"
         ];
         let exportData = [];
         let alllback = 0;
@@ -442,7 +449,8 @@ export default {
               Number(reportList[i].price) *
                 Number(reportList[i].members.length) -
                 alllback
-            ).toFixed(2)
+            ).toFixed(2),
+            supportPayment: reportList[i].supportPayment ? '是' : '否'
           };
           exportData.push(res);
         }
