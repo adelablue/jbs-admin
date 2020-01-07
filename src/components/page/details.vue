@@ -5,7 +5,7 @@
             <div class="script_name">剧本:   <span class="name_">{{scripts.name}}</span></div>
           </div>
           <div class="shop item">
-              <div class="shop_name">店名:   <span class="name_">{{shop.name}}</span></div>
+              <div class="shop_name">店名:   <span class="name_">{{shop.name}}<img v-if="supportPayment" src="../../../static/img/pay.png" alt="" style="vertical-align: middle;margin-left: 10px"></span></div>
           </div>
           <div class="startTime item">
               <div class="start_time">时间:   <span class="time_">{{startTime_2}}</span></div>
@@ -92,7 +92,8 @@ export default {
       hostBack: 0,
       joinerBack: 0,
       joinerBacks: 0,
-      allBacks: []
+      allBacks: [],
+      supportPayment: false
     };
   },
   mounted() {
@@ -116,6 +117,7 @@ export default {
           this.hasData = true;
           this.infomations = res.data.data;
           this.shop = this.infomations.shop;
+          this.supportPayment = res.data.data.supportPayment
           this.scripts = this.infomations.script;
           this.startTime_2 =
             formatDate2(new Date(this.infomations.startTime)) +
@@ -156,7 +158,6 @@ export default {
                     money: joinerBack[0].amount
                   };
                   this.allBacks.push(data);
-                  console.log(this.allBacks);
                 }
               }
             }

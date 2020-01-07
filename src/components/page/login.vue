@@ -66,9 +66,9 @@ export default {
                 type: "success",
                 message: "账户登录成功!"
               });
-              this.$router.push("/notifity");
               var userToken = res.data.token;
               var userData = res.data.user;
+              this.$router.push("/notifity");
               this.$common.setSessionStorage(
                 "token",
                 JSON.stringify(userToken)
