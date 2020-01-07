@@ -282,7 +282,7 @@ export default {
               let list = res.data.data;
               that.haveRefund = true;
               let pay_data = {};
-              let refunds0_len = 0
+              let refunds0_len = 2
               for (let i = 1; i < list.length; i++) {
                 for (let j = 0; j < list[i].refunds.length; j++) {
                   list[i].refunds[j].amont2 = (
@@ -316,12 +316,12 @@ export default {
                   newRefundsList = this.getArrSingle(refundsList);
                 }
               }
-              if (list[0].refunds.length > 2) {
+              if (list[0].refunds.length >= 2) {
                 refunds0_len = 2
               }
               for (let j = 0; j < refunds0_len; j++) {
                 list[0].refunds[j].amont2 = (
-                  list[0].refunds[j].refundAmount / 100
+                  Number(list[0].refunds[j].refundAmount) / 100
                 ).toFixed(2);
                 list[0].refunds[j].create_time = formatDate(
                   new Date(list[0].refunds[j].createdAt)
@@ -371,7 +371,6 @@ export default {
       return newArr;
     },
     getRefunds(item) {
-      console.log(item);
       if (item.refundStatus2 == "已退款") {
         this.$message({
           type: "error",

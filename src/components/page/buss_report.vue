@@ -82,7 +82,7 @@
             </el-table-column>
           </el-table>
         </div>
-        <div class="Pagination" v-if="pageShow">
+        <div class="Pagination" v-if="reportList.length > 0">
           <el-pagination
               background
               @size-change="handleSizeChange"
@@ -106,14 +106,13 @@ export default {
       postData: {
         limit: 10,
         offset: 0,
-        shopName: "梧桐树",
-        fromDate: "2019-12-09",
+        shopName: "",
+        fromDate: "2019-12-01",
         toDate: "2019-12-31"
       },
       reportList: [],
       pagination: null,
       total: 0,
-      pageShow: false,
       currentPage: 1,
       shopName: "",
       beginTime: "",
@@ -129,7 +128,7 @@ export default {
     let data = {
       limit: 10,
       offset: 0,
-      shopName: "梧桐树",
+      shopName: "输入店名",
       fromDate: "2019-12-01",
       toDate: "2019-12-31"
     };
@@ -172,7 +171,6 @@ export default {
         if (res.status == 200) {
           let reportList = res.data.data;
           let alllback = 0;
-          this.pageShow = true
           this.reportList = [];
           this.total = res.data.pagination.total.total;
           for (let i = 0; i < reportList.length; i++) {
