@@ -24,7 +24,11 @@
             </div>
           <span class="btn" @click="searchEvent">搜索</span>
           <span class="btn" @click="handleExport">导出</span>
-          
+        </div>
+        <div class="tips">
+          <span>以下数据为该时间段内，用户在该店发起的所有活动数据</span>
+          <span>组团中表示:用户已选择支付，在开场前需要确定车主是否锁场，并核对用户已成功支付且支付金额正确</span>
+          <span>已成团表示:用户已选择支付且车主已经锁场，在开场前核对用户支付金额正确</span>
         </div>
         <div class="content">
           <el-table
@@ -111,8 +115,8 @@ export default {
         limit: 10,
         offset: 0,
         shopName: "",
-        fromDate: "2019-12-01",
-        toDate: "2019-12-31"
+        fromDate: "2020-01-01",
+        toDate: "2020-01-15"
       },
       reportList: [],
       pagination: null,
@@ -133,8 +137,8 @@ export default {
       limit: 10,
       offset: 0,
       shopName: "输入店名",
-      fromDate: "2019-12-01",
-      toDate: "2019-12-31"
+      fromDate: "2020-01-01",
+      toDate: "2020-01-15"
     };
     if (this.$common.getSessionStorage("currentPage_report")) {
       data.offset =
@@ -393,7 +397,7 @@ export default {
           "script",
           "hostUser",
           "hostWechat",
-          "status",
+          "status2",
           "create_time",
           "start_time",
           "end_time",
@@ -438,7 +442,8 @@ export default {
             end_time: formatDate(new Date(reportList[i].endTime)),
             price: reportList[i].price,
             person: reportList[i].members.length,
-            status: reportList[i].status2,
+            status2: reportList[i].status2,
+            status: reportList[i].status,
             amount: (
               Number(reportList[i].price) * Number(reportList[i].members.length)
             ).toFixed(2),
@@ -450,7 +455,9 @@ export default {
             ).toFixed(2),
             supportPayment: reportList[i].supportPayment ? '是' : '否'
           };
-          exportData.push(res);
+          if(res.status == 'ready' || res.status == 'completed') {
+            exportData.push(res);
+          }
         }
         const data = this.formatJson(filterVal, exportData);
         export_json_to_excel(tHeader, data, this.shopName + "活动结算");
@@ -478,6 +485,14 @@ export default {
       border-radius: 5px;
       cursor: pointer;
       color: #fff;
+    }
+  }
+  .tips{
+    margin-top: 5px;
+    margin-left: 15px;
+    span{
+      display: block;
+      color: red;
     }
   }
 }

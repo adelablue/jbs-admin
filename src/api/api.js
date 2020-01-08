@@ -4,15 +4,15 @@ import moment from 'moment'
  * 
  * @param 登录接口
  */
+const API_PREFIX = process.env.NODE_ENV === 'development' ? '' : '/api';
+
 export function login(data) {
-    const API_PREFIX = process.env.NODE_ENV === 'development' ? '' : '/api';
     return axios.post(`${API_PREFIX}/auth/login`, data)
 }
 /**
  * 获取所有的notify
  */
 export function getAllNotify(data) {
-    const API_PREFIX = process.env.NODE_ENV === 'development' ? '' : '/api';
     let query = `&audience=${data.audience}`
     if (data.eventType) {
         query += `&eventType=${data.eventType}`        
@@ -26,14 +26,12 @@ export function getAllNotify(data) {
  * 通过查询获取notify
  */
 export function getNotifyBySearch(data) {
-    const API_PREFIX = process.env.NODE_ENV === 'development' ? '' : '/api';
     return axios.get(`${API_PREFIX}/notifications?offset=${data.offset}&limit=${data.limit}&event_type=${data.event_type}&wechat=${data.wechat}`)
 }
 /**
  * 查看详细的notify
  */
 export function checkAllNotify(data, body) {
-    const API_PREFIX = process.env.NODE_ENV === 'development' ? '' : '/api';
     return axios.put(`${API_PREFIX}/notifications/` + data.serialNumber, body)
 }
 
@@ -41,7 +39,6 @@ export function checkAllNotify(data, body) {
  * 查看消息详情
  */
 export function showDetails(data) {
-    const API_PREFIX = process.env.NODE_ENV === 'development' ? '' : '/api';
     return axios.get(`${API_PREFIX}/events/${data}/simplified`)
 }
 
@@ -49,7 +46,6 @@ export function showDetails(data) {
  * 获取所有的订单
  */
 export function getOrders(data) {
-    const API_PREFIX = process.env.NODE_ENV === 'development' ? '' : '/api';
     let query = ``
     if (data.tradeNo) {
         query += `&tradeNo=${data.tradeNo}`        
@@ -61,7 +57,6 @@ export function getOrders(data) {
  * 更新订单状态
  */
 export function updateOrder(data, body) {
-    const API_PREFIX = process.env.NODE_ENV === 'development' ? '' : '/api';
     return axios.put(`${API_PREFIX}/orders/${data.orderId}/refund/${data.refundId}`, body)
 }
 
@@ -77,7 +72,6 @@ export function refundOrder(data) {
  * 获取所有的活动列表
  */
 export function allEvents(data) {
-    const API_PREFIX = process.env.NODE_ENV === 'development' ? '' : '/api';
     let query = `&sort=%7B%22createdAt%22%3A+-1%7D&filter=${data.status}`
     if (data.keyword) {
         query += `&keyword=${data.keyword}`
@@ -88,7 +82,6 @@ export function allEvents(data) {
  * 查看该活动的订单
  */
 export function eventOrder(eventIds) {
-    const API_PREFIX = process.env.NODE_ENV === 'development' ? '' : '/api';
     return axios.get(`${API_PREFIX}/events/${eventIds}/orders`)
 }
 
@@ -96,7 +89,6 @@ export function eventOrder(eventIds) {
  * 获取所有的业务报表
  */
 export function allReports(data) {
-    const API_PREFIX = process.env.NODE_ENV === 'development' ? '' : '/api';
     return axios.get(`${API_PREFIX}/reports/events?offset=${data.offset}&limit=${data.limit}&shopName=${data.shopName}&fromDate=${data.fromDate}&toDate=${data.toDate}`)
 }
 

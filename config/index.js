@@ -11,7 +11,7 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/api': {
+      '/': {
         target: 'https://api.boogoogoo.com',
         // target: 'http://localhost:3000',
         changeOrigin: true,

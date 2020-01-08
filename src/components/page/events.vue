@@ -94,7 +94,6 @@
                     </el-table-column>
                     <el-table-column
                       prop="amont2"
-                      width="80"
                       label="价格(元)">
                     </el-table-column>
                     <el-table-column
@@ -109,11 +108,12 @@
                       </template>
                     </el-table-column>
                     <el-table-column
+                      width="150"
                       label="操作">
                       <template slot-scope="scope">
-                        <el-button type="primary"  v-if="scope.row.orderStatus2 == '创建返现' || scope.row.orderStatus2 == '可返现'" @click="getRefunds(scope.row)">返现</el-button>
-                        <el-button type="primary"  v-if="scope.row.status == 'failed'" @click="getRefunds(scope.row)">再次尝试</el-button>
-                        <el-button type="primary"  v-else disabled>返现</el-button>
+                        <el-button size="mini" type="primary"  v-if="scope.row.orderStatus2 == '创建返现' || scope.row.orderStatus2 == '可返现'" @click="getRefunds(scope.row)">返现</el-button>
+                        <el-button size="mini" type="primary"  v-if="scope.row.status == 'failed'" @click="getRefunds(scope.row)">再次尝试</el-button>
+                        <el-button size="mini" type="primary"  v-else disabled>返现</el-button>
                       </template>
                     </el-table-column>
                 </el-table>
