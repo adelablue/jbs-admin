@@ -90,8 +90,9 @@ export default {
     this.userInfo = JSON.parse(this.$common.getSessionStorage("user"));
     this.roles = this.userInfo.roles;
     for(let i = 0; i < this.roles.length; i++) {
-      if (this.roles[i] == '5da33b6c78dc3d815895803b') {
+      if (this.roles[i]._id == '5da33b6c78dc3d815895803b') {
         this.roleType = 'shopstaff'
+        console.log('shopstaff')
         this.$router.push("/buss_report");        
         for (let i = 0; i < this.items.length; i++) {
           this.items[i].show = false
@@ -102,8 +103,9 @@ export default {
           }
         }
       } 
-      if (this.roles[i] == '5d7f8cc124f808a2e89d6aeb') {
+      if (this.roles[i]._id == '5d7f8cc124f808a2e89d6aeb') {
         this.roleType = 'admin'
+        console.log('admin')
         this.$router.push("/notifity");        
          for (let i = 0; i < this.items.length; i++) {
             this.items[i].show = true

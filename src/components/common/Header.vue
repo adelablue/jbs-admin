@@ -58,6 +58,11 @@ export default {
     toExit() {
       this.$common.removeSessionStorage("token");
       this.$common.removeSessionStorage("loginStatus");
+      this.$common.removeSessionStorage('user')
+      this.$common.removeSessionStorage('currentPage_report')
+      this.$common.removeSessionStorage('shopName')
+      this.$common.removeSessionStorage('fromDate')
+      this.$common.removeSessionStorage('toDate')
       setTimeout(() => {
         this.$router.push("/login");
       }, 500);
@@ -112,8 +117,8 @@ export default {
     if (userToken == "undefined" || userToken == " ") {
       this.$router.push("/login");
     } else {
-      this.username = userData.nickName;
-      this.avator = userData.avatarUrl;
+        this.username = userData.username;
+        this.avator = 'http://pic.soutu123.cn/element_origin_min_pic/01/37/09/22573c3a831082c.jpg%21/fw/700/quality/90/unsharp/true/compress/true';
     }
   }
 };

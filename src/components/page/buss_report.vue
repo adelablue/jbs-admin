@@ -140,6 +140,12 @@ export default {
       fromDate: "2020-01-01",
       toDate: "2020-01-15"
     };
+    let userInfo = JSON.parse(this.$common.getSessionStorage("user"));
+    for (let i =0;i < userInfo.roles.length; i++) {
+      if (userInfo.roles[i]._id == '5da33b6c78dc3d815895803b') {
+        data.shopName = (userInfo.shops[0].name)
+      }
+    } 
     if (this.$common.getSessionStorage("currentPage_report")) {
       data.offset =
         (this.$common.getSessionStorage("currentPage_report") - 1) *
