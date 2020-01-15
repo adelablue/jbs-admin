@@ -60,6 +60,20 @@
                 label="价格(元)">
             </el-table-column>
             <el-table-column
+                prop="supportPaymentDisplay"
+                label="支持支付?">
+            </el-table-column>
+            <el-table-column
+                prop="supportPaymentDisplay"
+                label="锁场">
+                <template slot-scope="scope">
+                  <el-button size="mini" type="primary" v-if="scope.row.status == 'ready' && scope.row.nowpeople == scope.row.minNumberOfPersons" @click="getEventCompleted(scope.row)">待锁场</el-button>
+                  <el-button size="mini" type="primary" disabled="" v-if="scope.row.status == 'ready' && scope.row.nowpeople != scope.row.minNumberOfPersons" >待锁场</el-button>
+                  <el-button size="mini" type="primary" disabled="" v-if="scope.row.status == 'completed'">已完成</el-button>
+                  <el-button size="mini" type="primary" disabled="" v-if="scope.row.status == 'cancelled'">已解散</el-button>
+                </template>
+            </el-table-column>
+            <el-table-column
               width="80"
               type="expand"
               label="查看返现">
@@ -119,10 +133,7 @@
                 </el-table>
               </template>
             </el-table-column>
-            <el-table-column
-                prop="supportPaymentDisplay"
-                label="支持支付?">
-            </el-table-column>
+            
           </el-table>
         </div>
 
@@ -147,7 +158,8 @@ import {
   allEvents,
   formatDate,
   eventOrder,
-  updateOrder
+  updateOrder,
+  updateEvent
 } from "../../api/api.js";
 
 export default {
@@ -219,7 +231,10 @@ export default {
             } else if (eventList[i].status == "completed") {
               eventList[i].status2 = "已完成";
             }
-            eventList[i].supportPaymentDisplay = eventList[i].supportPayment ? '是' : '否'
+            eventList[i].supportPaymentDisplay = eventList[i].supportPayment
+              ? "是"
+              : "否";
+            eventList[i].nowpeople = eventList[i].numberOfOfflinePersons + eventList[i].numberOfParticipators
           }
           this.eventList = eventList;
           this.total = res.data.pagination.total;
@@ -287,7 +302,7 @@ export default {
               let list = res.data.data;
               that.haveRefund = true;
               let pay_data = {};
-              let refunds0_len = 2
+              let refunds0_len = 2;
               for (let i = 1; i < list.length; i++) {
                 for (let j = 0; j < list[i].refunds.length; j++) {
                   list[i].refunds[j].amont2 = (
@@ -322,7 +337,7 @@ export default {
                 }
               }
               if (list[0].refunds.length >= 2) {
-                refunds0_len = 2
+                refunds0_len = 2;
               }
               for (let j = 0; j < refunds0_len; j++) {
                 list[0].refunds[j].amont2 = (
@@ -354,8 +369,8 @@ export default {
                 newRefundsList.push(list[0].refunds[j]);
               }
             }
-            for(let i = 0 ; i < newRefundsList.length; i++) {
-              this.refundsList.push(newRefundsList[i])
+            for (let i = 0; i < newRefundsList.length; i++) {
+              this.refundsList.push(newRefundsList[i]);
             }
           });
         }
@@ -410,6 +425,35 @@ export default {
           });
         }
       });
+    },
+    // 管理员锁场
+    getEventCompleted(item) {
+      if (item.nowpeople < item.minNumberOfPersons) {
+        this.$message({
+          type: "error",
+          message: "参团人数少于剧本最小人数限制"
+        });
+        return false;
+      }
+      let query = {
+        status: "completed"
+      };
+      updateEvent(item.id, query).then(res => {
+        if (res.status == 200) {
+          this.$message({
+            type: "success",
+            message: "该场次已成功锁场!"
+          });
+          setTimeout(() => {
+            this.$router.go(0)
+          }, 1000);
+        } else {
+          this.$message({
+            type: "error",
+            message: "该场次锁场失败!"
+          });
+        }
+      })
     }
   }
 };

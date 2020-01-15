@@ -92,6 +92,12 @@ export function allReports(data) {
     return axios.get(`${API_PREFIX}/reports/events?offset=${data.offset}&limit=${data.limit}&shopName=${data.shopName}&fromDate=${data.fromDate}&toDate=${data.toDate}`)
 }
 
+/** 
+ * 更改订单状态为锁场
+ */
+export function updateEvent(eventIds, body) {
+    return axios.put(`${API_PREFIX}/events/${eventIds}/complete`, body)
+}
 /**
  * 通用方法
  */

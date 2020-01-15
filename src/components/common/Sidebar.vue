@@ -106,7 +106,7 @@ export default {
       if (this.roles[i]._id == '5d7f8cc124f808a2e89d6aeb') {
         this.roleType = 'admin'
         console.log('admin')
-        this.$router.push("/notifity");        
+        // this.$router.push("/notifity");        
          for (let i = 0; i < this.items.length; i++) {
             this.items[i].show = true
         }

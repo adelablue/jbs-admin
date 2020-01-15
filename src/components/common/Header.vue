@@ -63,6 +63,7 @@ export default {
       this.$common.removeSessionStorage('shopName')
       this.$common.removeSessionStorage('fromDate')
       this.$common.removeSessionStorage('toDate')
+      this.$common.removeSessionStorage("keyword")
       setTimeout(() => {
         this.$router.push("/login");
       }, 500);
